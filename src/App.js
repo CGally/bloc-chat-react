@@ -18,10 +18,21 @@ class App extends Component {
     super(props);
     this.state = {
       currentRoom: '',
-      user: ''
+      user: '',
+      signedIn: false
     };
     this.setCurrentRoom = this.setCurrentRoom.bind(this);
     this.setUser = this.setUser.bind(this);
+    this.changeSignIn = this.changeSignIn.bind(this);
+  }
+  componentDidMount() {
+    firebase.auth().signOut().then(() => {
+      this.setUser('');
+      this.setState({ signedIn: false })
+    });
+  }
+  changeSignIn(current) {
+    this.setState({ signedIn: current })
   }
   setCurrentRoom(room) {
   this.setState({ currentRoom: room })
@@ -32,10 +43,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <User firebase={ firebase } setUser={this.setUser} user={this.state.user}/>
+        <User firebase={ firebase } setUser={this.setUser} user={this.state.user} changeSignIn={this.changeSignIn} signedIn={this.state.signedIn}/>
         <RoomList firebase={ firebase } setCurrentRoom={this.setCurrentRoom} />
         <div>{ this.state.currentRoom.name }</div>
-        <MessageList firebase={firebase} currentRoom={this.state.currentRoom.key}/>
+        <MessageList firebase={firebase} currentRoom={this.state.currentRoom.key} user={this.state.user}/>
       </div>
     );
   }
