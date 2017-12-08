@@ -19,6 +19,9 @@ class RoomList extends Component {
     this.roomsRef.push( {name: this.state.newRoomName} );
     this.setState({newRoomName: ''})
   }
+  chooseRoom(room) {
+    this.props.setCurrentRoom(room);
+  }
   componentDidMount() {
      this.roomsRef.on('child_added', snapshot => {
        const room = snapshot.val();
@@ -34,7 +37,7 @@ class RoomList extends Component {
         <ul>
           {
             this.state.rooms.map((chatRoom) => {
-              return <li key={chatRoom.key}>{ chatRoom.name }</li>
+              return <li key={chatRoom.key} onClick={ (e) => this.chooseRoom(chatRoom) }>{ chatRoom.name }</li>
             })
           }
         </ul>
