@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 import './App.css';
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
+import User from './components/User';
 var config = {
   apiKey: "AIzaSyCbbNgxfdDeM_in3oHZmEUzYJLsrxPnICA",
   authDomain: "bloc-chat-react-9d90a.firebaseapp.com",
@@ -16,16 +17,22 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentRoom: ''
+      currentRoom: '',
+      user: ''
     };
     this.setCurrentRoom = this.setCurrentRoom.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
   setCurrentRoom(room) {
   this.setState({ currentRoom: room })
   }
+  setUser(user) {
+    this.setState({ user: user})
+  }
   render() {
     return (
       <div>
+        <User firebase={ firebase } setUser={this.setUser} user={this.state.user}/>
         <RoomList firebase={ firebase } setCurrentRoom={this.setCurrentRoom} />
         <div>{ this.state.currentRoom.name }</div>
         <MessageList firebase={firebase} currentRoom={this.state.currentRoom.key}/>
