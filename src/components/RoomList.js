@@ -22,6 +22,13 @@ class RoomList extends Component {
   chooseRoom(room) {
     this.props.setCurrentRoom(room);
   }
+  deleteRoom(roomKey, index) {
+    const room = this.props.firebase.database().ref('rooms/' + roomKey);
+    room.remove();
+    let arr = this.state.rooms;
+    arr.splice( index, 1 )
+    this.setState({ rooms: arr });
+  }
   componentDidMount() {
      this.roomsRef.on('child_added', snapshot => {
        const room = snapshot.val();
@@ -36,8 +43,8 @@ class RoomList extends Component {
         <h2>Chat Rooms</h2>
         <ul>
           {
-            this.state.rooms.map((chatRoom) => {
-              return <li key={chatRoom.key} onClick={ (e) => this.chooseRoom(chatRoom) }>{ chatRoom.name }</li>
+            this.state.rooms.map((chatRoom, index) => {
+              return <li key={chatRoom.key} onClick={ (e) => this.chooseRoom(chatRoom) }>{ chatRoom.name }<button onClick={ () => this.deleteRoom(chatRoom.key, index)}>Delete room</button></li>
             })
           }
         </ul>
